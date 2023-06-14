@@ -4,8 +4,8 @@ def lista_com_elementos_repetidos(números: list[int]) -> bool:
 
 def solve_sudoku(board: list[list[int]]) -> list[list[int]]:
     """Solves the board"""
-    célula_vazia = find_célula_vazia(board)
-    if célula_vazia is None:
+    celula_vazia = find_célula_vazia(board)
+    if celula_vazia is None:
         return True
 
     i, j = célula_vazia
@@ -18,20 +18,27 @@ def solve_sudoku(board: list[list[int]]) -> list[list[int]]:
             board[i][j] = 0
     raise ValueError
 
-def is_valid(board: list[list[int]]) -> bool:
-    """Checks if the board is valid"""
-    for linha in board:
-        if lista_com_elementos_repetidos(linha):
+def is_valid(board, num, i, j: list[list[int]]) -> bool:
+    for x in range(9):
+        # Check row
+        if board[i][x] == num:
             return False
-    for j in range(len(board)):
-        coluna = [linha[j] for linha in board]
-        if lista_com_elementos_repetidos(coluna):
+        # Check column
+        if board[x][j] == num:
             return False
+    # Check subgrid
+    start_row = (i // 3) * 3
+    start_col = (j // 3) * 3
+    for row in range(start_row, start_row + 3):
+        for col in range(start_col, start_col + 3):
+            if board[row][col] == num:
+                return False
+    return True
 
-def find_célula_vazia(board):
+def find_empty_cell(board: list[list[int]]) -> bool:
     for i in range(9):
         for j in range(9):
-            if board[i][j] == 0
+            if board[i][j] == 0:
                 return i, j
     return None
 
