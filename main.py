@@ -20,6 +20,7 @@ def solve_sudoku(board: list[list[int]]) -> list[list[int]]:
         raise ValueError
 
 def is_valid(board: list[list[int]]) -> bool:
+    # Checagem de linhas, colunas e setores
     for i in range(9):
         for j in range(9):
             num = board[i][j]
@@ -31,8 +32,8 @@ def is_valid(board: list[list[int]]) -> bool:
                 for row in range(9):
                     if row != i and board[row][j] == num:
                         return False
-
-                start_row = 3 * (i // 3)
+    # Setores
+                start_row = 3 * (i // 3) 
                 start_col = 3 * (j // 3)
                 for row in range(start_row, start_row + 3):
                     for col in range(start_col, start_col + 3):
