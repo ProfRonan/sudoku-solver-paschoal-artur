@@ -31,7 +31,7 @@ def is_valid(board: list[list[int]]) -> bool:
                 for row in range(9):
                     if row != i and board[row][j] == num:
                         return False
-  #Setores
+
                 start_row = 3 * (i // 3)
                 start_col = 3 * (j // 3)
                 for row in range(start_row, start_row + 3):
@@ -47,4 +47,4 @@ def encontra_célula_vazia(board: list[list[int]]) -> tuple[int, int]:
         for j in range(9):
             if board[i][j] == 0:
                 return i, j
-    return None
+    return None, None
