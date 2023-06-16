@@ -1,42 +1,48 @@
-
 def solve_sudoku(board: list[list[int]]) -> list[list[int]]:
-    empty_cell = find_empty_cell(board)
-    if empty_cell is None:
+    def resolve(board: list[list[int]]) -> bool:
+        i, j = encontra_célula_vazia(board)
+        if i == None or j == None:
+            return True  # Já está resolvido nesse caso
+
+        for num in range(1, 10):
+            board[i][j] = num  # Aloca um número no espaço necessário
+
+            if is_valid(board) and resolve(board): #De forma iterada resolve adiciona números
+                return True
+
+            board[i][j] = 0 #Refaz a última jogada
+
+        return False
+
+    if resolve(board):
         return board
+    else:
+        raise ValueError
 
-    row, col = empty_cell
-    for num in range(1, 10):
-        if is_valid(board, row, col, num):
-            board[row][col] = num
-
-            if solve_sudoku(board):
-                return board
-
-            board[row][col] = 0
-
-    raise ValueError
-
-def is_valid(board: list[list[int]], row: int, col: int, num: int) -> bool:
+def is_valid(board: list[list[int]]) -> bool:
     for i in range(9):
-        if board[row][i] == num and i != col:
-            return False
+        for j in range(9):
+            num = board[i][j]
+            if num != 0:
+                for col in range(9):
+                    if col != j and board[i][col] == num:
+                        return False
 
-    for i in range(9):
-        if board[i][col] == num and i != row:
-            return False
-
-    start_row = 3 * (row // 3)
-    start_col = 3 * (col // 3)
-
-    for i in range(start_row, start_row + 3):
-        for j in range(start_col, start_col + 3):
-            if board[i][j] == num and (i != row or j != col):
-                return False
+                for row in range(9):
+                    if row != i and board[row][j] == num:
+                        return False
+  #Setores
+                start_row = 3 * (i // 3)
+                start_col = 3 * (j // 3)
+                for row in range(start_row, start_row + 3):
+                    for col in range(start_col, start_col + 3):
+                        if (row != i or col != j) and board[row][col] == num:
+                            return False
 
     return True
 
+def encontra_célula_vazia(board: list[list[int]]) -> tuple[int, int]:
 
-def find_empty_cell(board: list[list[int]]) -> tuple[int, int]:
     for i in range(9):
         for j in range(9):
             if board[i][j] == 0:
